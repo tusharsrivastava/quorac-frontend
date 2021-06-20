@@ -1,0 +1,177 @@
+.td-none {
+    text-decoration: none !important;
+}
+
+.cp {
+    cursor: pointer;
+}
+
+.fw {
+    &-300 {
+        font-weight: 300;
+    }
+    &-400 {
+        font-weight: 400;
+    }
+    &-500 {
+        font-weight: 500;
+    }
+    &-600 {
+        font-weight: 600;
+    }
+    &-700 {
+        font-weight: 700;
+    }
+}
+
+// reusable font size classes
+.fsize {
+    &-08 {
+        font-size: 0.5rem;
+    }
+    &-14 {
+        font-size: 0.875rem;
+    }
+    &-16 {
+        font-size: 1rem;
+    }
+    &-20 {
+        font-size: 1.25rem;
+    }
+}
+
+.bg {
+    &-ui-01 {
+        background-color: $ui-01;
+    }
+    &-ui-03 {
+        background-color: $ui-03;
+    }
+    &-secondary {
+        background-color: $secondary;
+    }
+}
+
+.custom-input-icon {
+    &[data-icon="search"] {
+        position: relative;
+        input {
+            padding-left: 40px !important;
+        }
+        &::after {
+            content: '\e8b6';
+            font-family: 'Material Icons';
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            font-size: 1.25rem;
+            color: $gray-700;
+            font-weight: 300;
+            opacity: 0.75;
+        }
+    }
+}
+
+.customForm {
+    input, select, textarea {
+        border: 1px solid $form-input-color;
+        border-radius: 0;
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+        color: $text-muted;
+        &:focus, &:active {
+            outline: none;
+            box-shadow: 0 0 0 !important;
+        }
+    }
+    select {
+        -webkit-appearance: none;
+    }
+}
+
+.link-box {
+    a {
+        display: inline-block;
+        width: 100%;
+        border-left: 4px solid transparent;
+        @extend .text-muted;
+        @extend .fsize-14;
+        &.active, 
+        &:hover {
+            border-left: 4px solid $primary;
+            background-color: $secondary;
+            @extend .text-primary;
+        }
+    }
+}
+
+.marker-list {
+    li {
+        a {
+            color: $text-muted;
+            &:hover {
+                color: $primary;
+            }
+        }
+    }
+}
+
+.material-icons {
+    &.hoverable {
+        &:hover {
+            color: $primary;
+        }
+        &-btn {
+            padding: 4px;
+            border-radius: 50%;
+            &:hover {
+                background-color: $gray-200;
+            }
+            &:active {
+                background-color: $gray-300;
+            }
+        }
+    }
+}
+
+.card {
+    &[data-type="ad"] {
+        min-height: 300px;
+        &:empty::after {
+            text-align: center;
+            content: "Advertisement - Height can be adjusted";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            opacity: 0.5;
+            @extend .translate-middle;
+            @extend .small;
+            @extend .text-muted;
+        }
+    }
+
+    &-trending {
+        button.nav-link {
+            background-color: $gray-200;
+        }
+    }
+}
+
+.customTable {
+    border: 0;
+    tbody {
+        th, td {
+            border: 0;
+            @extend .fsize-14;
+        }
+        th {
+            padding-left: 0;
+            font-weight: 500;
+            @extend .text-dark;
+        }
+        td {
+            @extend .text-muted;
+        }
+    }
+}

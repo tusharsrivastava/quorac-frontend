@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Switch, Redirect, Route } from "react-router-dom";
+import siteRoutes, { defaultRoute } from './Routes';
+import './i18n';
+
+const Loader = () => {
+  return (
+    <span>Loading...</span>
+  );
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Suspense fallback={<Loader />}>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Redirect to={defaultRoute.path} />
+          </Route>
+          {siteRoutes.map((route) => (
+            <Route
+              key={`base_{route.path}`}
+              exact
+              path={route.path}
+              component={route.comp}
+            />
+          ))}
+        </Switch>
+      </Router>
+    </React.Suspense>
   );
 }
 

@@ -1,0 +1,156 @@
+//@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@300;400;500;600&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+//@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+
+// $primary: #809848;
+//$primary: #3D5AF0;
+$primary: #551a8b;
+$blue: $primary;
+$secondary: #E8EBFB;
+
+$dark: black;
+$warning: #FFC96B;
+$text-muted: #616161;
+// $red: #F54242;
+$red: #DD1C1A;
+$danger: $red;
+$green: #0fbe7b;
+$success: $green;
+
+$ui-01: #F2F2F2;
+$ui-03: #DADADA;
+
+$dropdown-link-active-bg: transparent;
+$link-color: $primary;
+$link-hover-color: $primary;
+$form-input-color: #C0BEBE;
+$small-font-size: 0.75rem;
+$nav-pills-link-active-bg: $primary;
+$nav-link-color: $text-muted;
+$nav-pills-border-radius: 0;
+
+$headings-font-family: "Lora";
+$headings-font-style: italic;
+$headings-font-weight: 600;
+
+$theme-colors: ( 
+    primary: $primary,
+    dark: $dark,
+    dropdown-link-active-bg: $dropdown-link-active-bg,
+    link-hover-color: $link-hover-color,
+    text-muted: $text-muted,
+    danger: $danger,
+    success: $success,
+    info: $info,
+    green: $green,
+    warning: $warning
+);
+
+// Import Bootstrap
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+// Import Mixins
+@import "./mixins";
+@import "./reusable";
+html,
+body {
+    font-family: 'Open Sans','Mukta', sans-serif;
+    background-color: $gray-100;
+}
+
+.navbar-brand {
+    font-family: "Lora", "Mukta", serif;
+}
+
+header {
+    background-color: white;
+    box-shadow: 0 15px 10px -15px #1111112b;
+    // .navbar-brand {
+    //     img {
+    //         min-width: 100px;
+    //     }
+    // }
+    .navigation-links {
+        a {
+            color: $dark;
+            padding: 6px;
+            display: inline-block;
+            border-bottom: 2px solid transparent;
+            &.active,
+            &:hover {
+                color: $primary;
+                border-bottom: 2px solid $primary;
+            }
+        }
+        span.material-icons {
+            &:hover,
+            &[data-bs-toggle="dropdown"].show {
+                color: $primary !important;
+            }
+        }
+    }
+    input[name='search'] {
+        min-width: 300px;
+    }
+    @include bp(tablet) {
+        #headerWrap {
+            position: fixed;
+            overflow-y: auto;
+            top: 56.63px;
+            left: 0;
+            background-color: white;
+            flex-direction: column;
+            max-width: 300px !important;
+            height: 100%;
+            z-index: 1000 !important;
+            padding: 20px;
+            transform: translateX(-100%);
+            transition: transform 200ms ease-in-out;
+            justify-content: flex-start !important;
+            form {
+                order: 1;
+            }
+            ul {
+                margin: 20px 0;
+                &:first-child {
+                    order: 2;
+                }
+                &:last-child {
+                    order: 3;
+                }
+                li {
+                    a {
+                        width: 100%;
+                        margin-bottom: 10px;
+                        border-bottom: unset !important;
+                    }
+                }
+            }
+            input[name='search'] {
+                min-width: auto;
+            }
+            &.show {
+                transform: translateX(0%);
+            }
+        }
+    }
+}
+
+#bg-overlay {
+    background-color: rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 56.63px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 56.63px);
+    content: "";
+    display: none;
+    &.show {
+        display: block;
+    }
+}
