@@ -8,7 +8,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    debug: process.env.MODE !== "prod",
+    debug: false,
     fallbackLng: "en",
     interpolation: {
       escapeValue: false,

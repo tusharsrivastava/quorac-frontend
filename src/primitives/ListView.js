@@ -11,18 +11,23 @@ const _ListView = (props) => {
         <ul className="list-unstyled pl-0 mb-3 link-box px-1">
           {list.map((li) => {
             return (
-              <li key={li.key}>
+              <li className={li.active ? "d-flex active": "d-flex"} key={`lv_${li.key}`}>
                 <a
                   href={`#${li.key}`}
-                  onClick={() => onSelect(li)}
+                  onClick={(e) => onSelect(e, li)}
                   className={
                     li.active
-                      ? "td-none px-3 py-2 active"
+                      ? "td-none px-3 py-2"
                       : "td-none px-3 py-2"
                   }
                 >
                   {li.title}
                 </a>
+                {
+                  li.actions?.map((action) => {
+                    return (<button key={`lva_${action.title}`} className={`flex-grow-0 flex-shrink-0 btn fsize-14 text-${action.theme}`}>{action.title}</button>)
+                  })
+                }
               </li>
             );
           })}

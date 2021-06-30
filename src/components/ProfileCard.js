@@ -7,7 +7,7 @@ const ProfileMain = (props) => {
       <div className="d-flex flex-column mt-3 pb-3 border-bottom">
         <div className="d-flex flex-md-row flex-column justify-content-between">
             <span className="fw-700">Akash Raj Dahal</span>
-            <span className="badge bg-primary align-content-center mt-1 align-self-start mb-1 mb-md-0">
+            <span className="badge bg-danger align-content-center mt-1 align-self-start mb-1 mb-md-0">
                 Level 5
             </span>
         </div>

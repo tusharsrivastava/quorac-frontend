@@ -91,17 +91,29 @@
 }
 
 .link-box {
-    a {
-        display: inline-block;
-        width: 100%;
-        border-left: 4px solid transparent;
-        @extend .text-muted;
-        @extend .fsize-14;
+    li {
+        a {
+            display: inline-block;
+            width: 100%;
+            border-left: 4px solid transparent;
+            @extend .text-muted;
+            @extend .fsize-14;
+        }
+        button {
+            display: none;
+        }
+
         &.active, 
         &:hover {
-            border-left: 4px solid $primary;
             background-color: $secondary;
-            @extend .text-primary;
+            
+            a {
+                border-left: 4px solid $primary;
+                @extend .text-primary;
+            }
+        }
+        &:hover > button {
+            display: block;
         }
     }
 }
