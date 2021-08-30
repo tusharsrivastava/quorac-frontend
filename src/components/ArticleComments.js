@@ -1,8 +1,13 @@
 import { BiCommentDots, BiLike, BiDislike, BiFlag } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { Formik } from "formik";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { addComment } from "../app/features/singlepost";
 
 export const SingleComment = (props) => {
+  const { comment } = props;
+
   return (
     <div className="card border-0 rounded-0 shadow-sm p-3 mb-4">
       <div className="d-flex w-100 align-items-center">
@@ -25,12 +30,7 @@ export const SingleComment = (props) => {
       </div>
       <div className="text-muted fsize-14 mt-3">
         <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. In sequi
-          deserunt fugit accusamus mollitia ipsa doloremque perferendis officiis
-          unde, fuga nemo deleniti distinctio repudiandae. Eveniet blanditiis
-          assumenda aut expedita, quia, fugiat, commodi ipsam impedit est
-          suscipit amet quod iste alias porro veniam in a ducimus? Doloribus,
-          unde expedita? Et, delectus!
+          {comment.content}
         </p>
       </div>
       <hr />
@@ -77,23 +77,48 @@ export const CommentsSection = (props) => {
 
 export const PostComment = (props) => {
   const { t } = useTranslation();
+  const { postId } = props;
+  const dispatch = useDispatch();
 
   return (
-    <form className="d-flex flex-row">
-      <img
-        src="/person.png"
-        alt="User"
-        width="35"
-        className="img-fluid rounded-circle border flex-grow-0 flex-shrink-0"
-      />
-      <input
-        type="text"
-        placeholder={`${t("Add your comment")}..`}
-        className="form-control fsize-14 rounded-0 ms-2 flex-fill"
-      />
-      <button className="btn btn-primary rounded-0 px-4 ms-2 fsize-14 flex-grow-0 flex-shrink-0">
-        {t("Comment")}
-      </button>
-    </form>
+    <Formik
+      initialValues={{ comment: "" }}
+      validate={values => {
+         const errors = {};
+         if (!values.comment) {
+           errors.comment = 'Comment Text is Required';
+         }
+         return errors;
+      }}
+      onSubmit={(values, { setSubmitting }) => {
+        dispatch(addComment({ postId: postId, comment: values.comment }));
+      }}
+    >
+      {({ values, errors, touched, handleSubmit, handleChange, isSubmitting }) => (
+        <form className="d-flex flex-row" onSubmit={handleSubmit}>
+          <img
+            src="/person.png"
+            alt="User"
+            width="35"
+            className="img-fluid rounded-circle border flex-grow-0 flex-shrink-0"
+          />
+          <input
+            type="text"
+            name="comment"
+            placeholder={`${t("Add your comment")}..`}
+            onChange={handleChange}
+            value={values.comment}
+            className="form-control fsize-14 rounded-0 ms-2 flex-fill"
+          />
+          {errors.comment && touched.comment && errors.comment}
+          <button
+            className="btn btn-primary rounded-0 px-4 ms-2 fsize-14 flex-grow-0 flex-shrink-0"
+            disabled={isSubmitting}
+          >
+            {t("Comment")}
+          </button>
+        </form>
+      )}
+    </Formik>
   );
 }

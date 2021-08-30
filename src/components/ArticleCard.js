@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 export const ArticleCard = (props) => {
   const { t } = useTranslation();
-  const { contentType } = props;
+  const { contentType, ...post } = props;
 
   return (
     <div className="card shadow-sm mb-4 border-0 rounded-0 bg-white p-4">
@@ -34,7 +34,9 @@ export const ArticleCard = (props) => {
                 Akash Raj Dahal
               </Link>
             </p>
-            <span className="badge bg-danger rounded-0 text-light">Level 5</span>
+            <span className="badge bg-danger rounded-0 text-light">
+              Level 5
+            </span>
             <small className="text-muted ms-md-4 ms-2">Asked: 12hr ago</small>
           </div>
         </div>
@@ -42,14 +44,14 @@ export const ArticleCard = (props) => {
       <div className="d-flex">
         <div className="d-flex flex-column align-items-center pe-4">
           <BiUpArrowAlt size="1.25rem" />
-          <span className="text-primary">16</span>
+          <span className="text-primary">{post.statistics.upvotes}</span>
           <BiDownArrowAlt size="1.25rem" />
         </div>
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column w-100">
           <div className="d-flex justify-content-between align-items-baseline">
             <h1 className="fs-5 mb-3">
               <Link to="/article/1" className="td-none text-dark">
-                What does the fox say?
+                {post.title}
               </Link>
             </h1>
             <span className="badge bg-secondary rounded-0 text-dark">
@@ -57,10 +59,10 @@ export const ArticleCard = (props) => {
             </span>
           </div>
           <p className="text-muted fsize-14 mb-0">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sit magni
-            dolor incidunt illum ratione excepturi ipsum nostrum obcaecati autem
-            exercitationem.
-            <button className="btn text-primary p-0 px-1 fsize-14 td-none">Read more..</button>
+            {post.content}
+            <button className="btn text-primary p-0 px-1 fsize-14 td-none">
+              Read more..
+            </button>
           </p>
           <hr />
           <div className="d-flex flex-md-row flex-column w-100 align-items-md-center">
@@ -84,11 +86,15 @@ export const ArticleCard = (props) => {
               <div className="d-flex align-items-center">
                 <div className="d-flex">
                   <BiCommentDots />
-                  <span className="ms-1 small text-muted">50+</span>
+                  <span className="ms-1 small text-muted">
+                    {post.statistics.comments}
+                  </span>
                 </div>
                 <div className="d-flex ms-3">
                   <BiCheckDouble />
-                  <span className="ms-1 small text-muted">1.2k</span>
+                  <span className="ms-1 small text-muted">
+                    {post.statistics.views}
+                  </span>
                 </div>
                 <div className="d-flex ms-3">
                   <BiDotsVertical />

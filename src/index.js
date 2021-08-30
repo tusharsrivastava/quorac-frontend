@@ -8,6 +8,8 @@ import { primaryTheme } from './theming/Theme';
 import { ThemeProvider } from 'styled-components';
 // App
 import App from './App';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
 // Analytics
 import reportWebVitals from './reportWebVitals';
 
@@ -15,7 +17,9 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={primaryTheme}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")

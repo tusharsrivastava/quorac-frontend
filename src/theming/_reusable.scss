@@ -74,13 +74,16 @@
 }
 
 .customForm {
-    input, select, textarea {
+    input,
+    select,
+    textarea {
         border: 1px solid $form-input-color;
         border-radius: 0;
         font-size: 0.875rem;
         padding: 0.5rem 0.75rem;
         color: $text-muted;
-        &:focus, &:active {
+        &:focus,
+        &:active {
             outline: none;
             box-shadow: 0 0 0 !important;
         }
@@ -102,17 +105,15 @@
         button {
             display: none;
         }
-
-        &.active, 
+        &.active,
         &:hover {
             background-color: $secondary;
-            
             a {
                 border-left: 4px solid $primary;
                 @extend .text-primary;
             }
         }
-        &:hover > button {
+        &:hover>button {
             display: block;
         }
     }
@@ -162,7 +163,6 @@
             @extend .text-muted;
         }
     }
-
     &-trending {
         button.nav-link {
             background-color: $gray-200;
@@ -173,7 +173,8 @@
 .customTable {
     border: 0;
     tbody {
-        th, td {
+        th,
+        td {
             border: 0;
             @extend .fsize-14;
         }
@@ -186,4 +187,8 @@
             @extend .text-muted;
         }
     }
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -12,11 +13,24 @@ export const JoiningBonus = (props) => {
 }
 
 export const AdPlaceholder = (props) => {
+  useEffect(() => {
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  }, []);
+
   return (
     <div
       className="card shadow-sm border-0 rounded-0 bg-white p-4 mb-4"
       data-type="ad"
-    ></div>
+    >
+      <ins
+        className="adsbygoogle"
+        style={{"display":"block"}}
+        data-ad-client="ca-pub-0695598434578342"
+        data-ad-slot="6795062071"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </div>
   );
 }
 

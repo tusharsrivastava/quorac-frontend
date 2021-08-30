@@ -5,63 +5,35 @@ import { Footer } from "../primitives/Footer";
 import { AdPlaceholder, AppDownloadLinks, JoiningBonus } from "../primitives/AppPrimitives";
 import { TabView } from "../primitives/TabView";
 import { useTranslation } from "react-i18next";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCategories, setActiveCategory, toggleFollowCategory } from "../app/features/categories";
 
 const _LeftSidebar = (props) => {
-  const { history, location } = props;
   const { t } = useTranslation();
-  const [ categories, setCategories ] = useState([]);
+  const dispatch =  useDispatch();
+  const { categories, isLoading } = useSelector(state => state.categories);
 
   useEffect(() => {
-    const cats = [
-      { title: "Arts and Humanities", key: "art", active: false, actions: [{
-        title: "+Follow (6.4k)", theme: "primary"
-      }] },
-      { title: "Beauty and Style", key: "beauty", active: false, actions: [{
-        title: "+Follow (1.3m)", theme: "primary"
-      }]  },
-      { title: "Business and Finance", key: "business", active: false, actions: [{
-        title: "-Unfollow (3.4k)", theme: "danger"
-      }]  },
-      { title: "Cars and Transportation", key: "transport", active: false, actions: [{
-        title: "+Follow (1.2k)", theme: "primary"
-      }]  },
-      { title: "Computers and Internet", key: "internet", active: false, actions: [{
-        title: "-Unfollow (17.2k)", theme: "danger"
-      }]  },
-      { title: "Consumer Electronics", key: "electronics", active: false, actions: [{
-        title: "+Follow (1.3k)", theme: "primary"
-      }]  },
-    ];
-    setCategories(cats);
-  }, []);
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const setCategory = useCallback((e, cat) => {
-    const prevSelected = categories.find(c => c.active);
-    const cats = categories.map(c => {
-      return {
-        ...c,
-        active: false,
-      };
-    });
-    if (prevSelected !== undefined && prevSelected.key === cat.key) {
-      setCategories(cats);
-      history.push({ ...location, hash: '' });
-      e.preventDefault();
-      e.stopPropagation();
-    } else {
-      cats.forEach(c => {
-        if (c.key === cat.key) {
-          c.active = true;
-        }
-      });
-      setCategories(cats);
-      return true;
-    }
-  }, [categories, history, location]);
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(setActiveCategory(cat.key));
+    return false;
+  }, [dispatch]);
+
+  const toggleFollow = useCallback((e, cat) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(toggleFollowCategory(cat.key));
+    return false;
+  }, [dispatch]);
 
   return (
     <>
-      <ListView title={t("Categories")} list={categories} onSelect={setCategory} />
+      <ListView title={t("Categories")} list={categories} onToggleFollow={toggleFollow} onSelect={setCategory} isLoading={isLoading} />
       <Footer routes={props.routes} />
     </>
   );

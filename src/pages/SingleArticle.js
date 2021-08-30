@@ -1,12 +1,23 @@
 import { withTheme } from "styled-components";
 import { Layout } from "../components/Layout";
-import { ArticleCard } from "../components/ArticleCard";
+import { Post } from "../components/Post";
 import { LeftSidebar, RightSidebar } from "../components/Sidebar";
 
 import siteRoutes from "../Routes";
 import { CommentsSection, PostComment, SingleComment } from "../components/ArticleComments";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchSinglePost } from "../app/features/singlepost";
 
 const SingleArticle = (props) => {
+  const { id } = props.match.params;
+  const { post, comments } = useSelector(state => state.singlePost);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchSinglePost(id));
+  },[dispatch, id]);
+
   return (
     <Layout
       routes={siteRoutes}
@@ -15,11 +26,23 @@ const SingleArticle = (props) => {
       leftSidebar={<LeftSidebar routes={siteRoutes} />}
       rightSidebar={<RightSidebar />}
     >
-      <ArticleCard contentType="Article" />
+      <Post post={post} />
       <PostComment />
       <CommentsSection>
-        {Array.from(Array(3).keys()).map(i =>
-          <SingleComment key={i} />
+        {comments.length > 0 &&
+          comments.map((comment) => (
+            <SingleComment key={comment.id} comment={comment} />
+          ))}
+        {comments.length === 0 && (
+          <div className="text-center">
+            <img
+              src="/empty.svg"
+              alt="No Comments"
+              className="img-fluid"
+              style={{ maxWidth: "60%" }}
+            />
+            <h4 className="h4 mt-4">No Comments Posted Yet</h4>
+          </div>
         )}
       </CommentsSection>
     </Layout>

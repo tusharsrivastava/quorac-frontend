@@ -1,24 +1,13 @@
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
+import { toggleSubCategoryActive } from "../app/features/subcategories";
 
 const FilterCard = (props) => {
-    const { location } = props;
-    const [ visible, setVisible ] = useState(false);
-    const [ title, setTitle ] = useState("");
+    const dispatch = useDispatch();
+    const { subcategories, title, isVisible } = useSelector(state => state.subcategories);
 
-    useEffect(()=> {
-      if (location?.hash) {
-        setVisible(true);
-        setTitle(
-          location?.hash.slice(1).replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())
-        );
-      } else {
-        setVisible(false);
-      }
-    }, [location?.hash]);
-
-    if (!visible) {
+    if (!isVisible) {
       return <></>;
     }
 
@@ -32,10 +21,13 @@ const FilterCard = (props) => {
           </h6>
         </div>
         <div className="d-flex mb-3 flex-wrap">
-          {Array.from(new Array(10).keys()).map(k => {
-            const active = Math.random()*100 > 35;
-            return (<span key={k} className={`badge rounded-0 me-2 mb-2 ${active?'bg-primary text-light':'bg-secondary text-dark'}`}>
-              <small>Sub Category {k}</small>
+          {subcategories && subcategories.map(subcat => {
+            return (
+            <span
+              onClick={() => dispatch(toggleSubCategoryActive(subcat.key))}
+              key={subcat.key}
+              className={`badge cursor-pointer rounded-0 me-2 mb-2 ${subcat.isActive?'bg-primary text-light':'bg-secondary text-dark'}`}>
+              <small>{subcat.title}</small>
             </span>);
           })}
         </div>

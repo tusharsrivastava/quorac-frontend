@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route } from "react-router-dom";
+import history from "./app/history";
 import siteRoutes, { defaultRoute } from './Routes';
 import './i18n';
 
@@ -12,7 +13,7 @@ const Loader = () => {
 function App() {
   return (
     <React.Suspense fallback={<Loader />}>
-      <Router>
+      <Router history={history}>
         <Switch>
           <Route exact path="/">
             <Redirect to={defaultRoute.path} />
