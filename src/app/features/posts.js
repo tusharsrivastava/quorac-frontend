@@ -23,7 +23,8 @@ const randomContentType = () => {
 
 export const fetchPosts = createAsyncThunk("fetchPosts", async (payload) => {
   const { type, contentType } = payload || {};
-
+  return [];
+  /*
   return Array.from(Array(10).keys()).map((i) => {
     return {
       id: i,
@@ -40,7 +41,7 @@ export const fetchPosts = createAsyncThunk("fetchPosts", async (payload) => {
       category: randomCategory(),
       tags: randomSubcategories(),
     };
-  });
+  });*/
 });
 
 const postsSlice = createSlice({
