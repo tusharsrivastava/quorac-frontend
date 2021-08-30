@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import api from "../api";
 // import history from "../history";
 
 const randomCategory = () => {
@@ -21,9 +22,70 @@ const randomContentType = () => {
   return contentTypes[Math.floor(Math.random() * contentTypes.length)];
 }
 
+const contentTypeToPostType = (contentType) => {
+  switch (contentType) {
+    case "Question":
+      return "answer";
+    case "Article":
+      return "article";
+    case "Blog Post":
+      return "blog";
+    default:
+      return "";
+  }
+}
+
+const contentTypeFromPostType = (postType) => {
+  switch (postType) {
+    case "answer":
+      return "Question";
+    case "article":
+      return "Article";
+    case "blog":
+      return "Blog Post";
+    default:
+      return "";
+  }
+}
+
 export const fetchPosts = createAsyncThunk("fetchPosts", async (payload) => {
   const { type, contentType } = payload || {};
-  return [];
+  // If no type is specified, fetch trending posts
+  let response = [];
+  if (!type) {
+    response = await api.get("/posts/trending");
+  } else {
+    const ptype = contentTypeToPostType(contentType);
+    response = await api.get(`/posts/type/${ptype}`);
+  }
+  console.log(response);
+  return response.data.data.map((post) => ({
+    id: post.id,
+    contentType: contentTypeFromPostType(post.type),
+    type: "post",
+    title: post.title,
+    content: post.content,
+    statistics: {
+      upvotes: post.upvotes,
+      downvotes: post.downvotes,
+      comments: post.numComments,
+      views: post.numLikes,
+    },
+    postedBy: {
+      id: post.createdBy.id,
+      firstName: post.createdBy.firstName,
+      lastName: post.createdBy.lastName,
+      on: post.createdAt,
+    },
+    questioner: post.parent ? {
+      id: post.parent?.createdBy.id,
+      firstName: post.parent?.createdBy.firstName,
+      lastName: post.parent?.createdBy.lastName,
+      on: post.parent?.createdAt,
+    } : null,
+    category: post.category,
+    tags: post.tags,
+  }));
   /*
   return Array.from(Array(10).keys()).map((i) => {
     return {

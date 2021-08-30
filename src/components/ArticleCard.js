@@ -7,6 +7,7 @@ import {
   BiDotsVertical,
 } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import Moment from "react-moment";
 
 export const ArticleCard = (props) => {
   const { t } = useTranslation();
@@ -31,13 +32,20 @@ export const ArticleCard = (props) => {
           <div className="d-flex justify-content-between align-items-baseline">
             <p className="mb-3 fsize-14 fw-700 pe-3">
               <Link to="/profile" className="td-none text-primary">
-                Akash Raj Dahal
+                {post.questioner
+                  ? `${post.questioner.firstName} ${post.questioner.lastName}`
+                  : `${post.postedBy.firstName} ${post.postedBy.lastName}`}
               </Link>
             </p>
             <span className="badge bg-danger rounded-0 text-light">
               Level 5
             </span>
-            <small className="text-muted ms-md-4 ms-2">Asked: 12hr ago</small>
+            <small className="text-muted ms-md-4 ms-2">
+              {post.questioner ? "Asked" : "Posted"}:{" "}
+              <Moment fromNow>
+                {post.questioner ? post.questioner.on : post.postedBy.on}
+              </Moment>
+            </small>
           </div>
         </div>
       </div>
@@ -50,7 +58,7 @@ export const ArticleCard = (props) => {
         <div className="d-flex flex-column w-100">
           <div className="d-flex justify-content-between align-items-baseline">
             <h1 className="fs-5 mb-3">
-              <Link to="/article/1" className="td-none text-dark">
+              <Link to={`/article/${post.id}`} className="td-none text-dark">
                 {post.title}
               </Link>
             </h1>
@@ -75,12 +83,14 @@ export const ArticleCard = (props) => {
                 className="img-fluid rounded-circle bg-secondary"
               />
               <small className="text-muted ms-2">
-                Answered by{" "}
+                {post.questioner ? "Answered" : "Posted"} by{" "}
                 <Link to="/profile" className="td-none text-primary">
-                  Akash Raj Dahal
+                  {post.postedBy.firstName} {post.postedBy.lastName}
                 </Link>
               </small>
-              <small className="text-muted ms-md-4 ms-2">12hr ago</small>
+              <small className="text-muted ms-md-1 ms-0">
+                <Moment fromNow>{post.postedBy.on}</Moment>
+              </small>
             </div>
             <div className="ms-sm-auto mt-2 mt-md-0">
               <div className="d-flex align-items-center">

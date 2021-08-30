@@ -1,25 +1,52 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import api from '../api';
+
+const contentTypeFromPostType = (postType) => {
+  switch (postType) {
+    case "answer":
+      return "Question";
+    case "article":
+      return "Article";
+    case "blog":
+      return "Blog Post";
+    default:
+      return "";
+  }
+};
 
 export const fetchSinglePost = createAsyncThunk("fetchSinglePost", async (payload, { dispatch }) => {
-  const { id } = payload;
+  const response = await api.get(`/posts/${payload}`);
+  const post = response.data;
 
   return {
     post: {
-      id: id,
+      id: post.id,
+      contentType: contentTypeFromPostType(post.type),
       type: "post",
-      contentType: "Question",
-      title: "How to use Redux?",
-      // Write a paragraph on redux and its uses
-      content: `
-        Redux is a state management library. It is a toolkit for managing the state of your application.
-        It is a library that helps you to keep your application state in a single place.
-      `,
+      title: post.title,
+      content: post.content,
       statistics: {
-        views: 199,
-        upvotes: 10,
-        downvotes: 0,
-        comments: 1,
+        upvotes: post.upvotes,
+        downvotes: post.downvotes,
+        comments: post.numComments,
+        views: post.numLikes,
       },
+      postedBy: {
+        id: post.createdBy.id,
+        firstName: post.createdBy.firstName,
+        lastName: post.createdBy.lastName,
+        on: post.createdAt,
+      },
+      questioner: post.parent
+        ? {
+            id: post.parent?.createdBy.id,
+            firstName: post.parent?.createdBy.firstName,
+            lastName: post.parent?.createdBy.lastName,
+            on: post.parent?.createdAt,
+          }
+        : null,
+      category: post.category,
+      tags: post.tags,
     },
     comments: [],
   };
