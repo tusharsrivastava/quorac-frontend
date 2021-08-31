@@ -3,6 +3,7 @@ import categoriesReducer from "./features/categories";
 import subcategoriesReducer from "./features/subcategories";
 import postsReducer from "./features/posts";
 import singlePostReducer from "./features/singlepost";
+import newPostReducer from "./features/newpost";
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     subcategories: subcategoriesReducer,
     posts: postsReducer,
     singlePost: singlePostReducer,
+    newPost: newPostReducer,
   }
 });

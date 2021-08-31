@@ -14,7 +14,7 @@ const Answers = (props) => {
   const { posts } = useSelector((state) => state.posts);
 
   useEffect(() => {
-    dispatch(fetchPosts({ contentType: 'Question', type: 'post' }));
+    dispatch(fetchPosts({ contentType: 'Answer', type: 'post' }));
   }, [dispatch]);
 
   return (

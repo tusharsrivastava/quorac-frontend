@@ -3,8 +3,10 @@ import api from '../api';
 
 const contentTypeFromPostType = (postType) => {
   switch (postType) {
+    case "question":
+      return "Unanswered";
     case "answer":
-      return "Question";
+      return "Answer";
     case "article":
       return "Article";
     case "blog":

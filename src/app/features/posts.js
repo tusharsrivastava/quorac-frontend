@@ -2,29 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../api";
 // import history from "../history";
 
-const randomCategory = () => {
-  const categories = ["art", "beauty", "business", "transport", "internet", "electronics"];
-  return categories[Math.floor(Math.random() * categories.length)];
-}
-
-const randomSubcategories = () => {
-  // Select 3 to 5 tags from a list of subcategories
-  const subcategories = Array.from((new Array(10)).keys()).map(i => `subcategory${i}`);
-  const subcategoriesList = [];
-  for (let i = 0; i < Math.floor(Math.random() * 5) + 3; i++) {
-    subcategoriesList.push(subcategories[Math.floor(Math.random() * subcategories.length)]);
-  }
-  return subcategoriesList;
-}
-
-const randomContentType = () => {
-  const contentTypes = ["Question", "Article", "Blog Post"];
-  return contentTypes[Math.floor(Math.random() * contentTypes.length)];
-}
-
 const contentTypeToPostType = (contentType) => {
   switch (contentType) {
-    case "Question":
+    case "Unanswered":
+      return "question";
+    case "Answer":
       return "answer";
     case "Article":
       return "article";
@@ -37,8 +19,10 @@ const contentTypeToPostType = (contentType) => {
 
 const contentTypeFromPostType = (postType) => {
   switch (postType) {
+    case "question":
+      return "Unanswered";
     case "answer":
-      return "Question";
+      return "Answer";
     case "article":
       return "Article";
     case "blog":
@@ -86,24 +70,6 @@ export const fetchPosts = createAsyncThunk("fetchPosts", async (payload) => {
     category: post.category,
     tags: post.tags,
   }));
-  /*
-  return Array.from(Array(10).keys()).map((i) => {
-    return {
-      id: i,
-      contentType: contentType ? contentType : randomContentType(),
-      type: type ? type : Math.round(100 * Math.random()) < 20 ? "poll" : "post",
-      title: "How to use Redux?",
-      content: "This is a question about how to use redux",
-      statistics: {
-        views: Math.ceil(9999 * Math.random()),
-        upvotes: Math.ceil(10 * Math.random()),
-        downvotes: Math.ceil(5 * Math.random()),
-        comments: Math.ceil(3 * Math.random()),
-      },
-      category: randomCategory(),
-      tags: randomSubcategories(),
-    };
-  });*/
 });
 
 const postsSlice = createSlice({

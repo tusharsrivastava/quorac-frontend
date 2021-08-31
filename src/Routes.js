@@ -92,6 +92,13 @@ const siteRoutes = [
     showInNav: false,
     showInFooter: false,
   },
+  {
+    path: "/new",
+    title: "Create New Post",
+    comp: React.lazy(() => import("./pages/NewPost")),
+    showInNav: false,
+    showInFooter: false,
+  },
 ];
 
 export const defaultRoute = siteRoutes[0];

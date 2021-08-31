@@ -143,9 +143,9 @@ const _Navbar = (props) => {
               </div>
             </form>
 
-            <button className="btn btn-primary flex-grow-0 flex-shrink-0">
+            <Link to="/new" className="btn btn-primary flex-grow-0 flex-shrink-0">
               <BiEdit /> {t("New Post")}
-            </button>
+            </Link>
 
             <ul className="list-unstyled d-flex align-items-center justify-item-end mb-0 navigation-links">
               <li className="mx-xl-3 mx-2">
