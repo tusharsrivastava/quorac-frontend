@@ -99,6 +99,13 @@ const siteRoutes = [
     showInNav: false,
     showInFooter: false,
   },
+  {
+    path: "/answer/:id",
+    title: "Post New Answer",
+    comp: React.lazy(() => import("./pages/Answer")),
+    showInNav: false,
+    showInFooter: false,
+  },
 ];
 
 export const defaultRoute = siteRoutes[0];

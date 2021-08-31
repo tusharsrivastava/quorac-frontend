@@ -4,14 +4,27 @@ import { LeftSidebar, RightSidebar } from "../components/Sidebar";
 
 import siteRoutes from "../Routes";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PostCreator } from "../components/PostCreator";
 import { Formik } from "formik";
-import { createNewPost } from "../app/features/newpost";
+import { createNewPost, resetRedirect } from "../app/features/newpost";
+import { Redirect } from "react-router";
+import { useEffect } from "react";
 
 const NewPost = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { redirectTo } = useSelector((state) => state.newPost);
+
+  useEffect(() => {
+    if (redirectTo !== null) {
+      dispatch(resetRedirect());
+    }
+  }, [dispatch, redirectTo]);
+
+  if (redirectTo) {
+    return <Redirect to={redirectTo} />;
+  }
 
   return (
     <Layout
@@ -27,7 +40,7 @@ const NewPost = (props) => {
         initialValues={{ title: "", content: "", type: "question" }}
         validate={(values) => {
           const errors = {};
-          if (!values.content) {
+          if (!values.title) {
             errors.title = "Post Title is Required";
           }
           return errors;
