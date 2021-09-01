@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { addComment } from "../app/features/singlepost";
+import Moment from "react-moment";
 
 export const SingleComment = (props) => {
   const { comment } = props;
@@ -20,18 +21,21 @@ export const SingleComment = (props) => {
             className="img-fluid rounded-circle border bg-secondary"
           />
           <span className="ms-2">
-            <Link to="#" className="td-none fsize-14 text-dark">
-              Akash Raj Dahal
+            <Link
+              to={`/profile/${comment.postedBy.username}`}
+              className="td-none fsize-14 text-dark"
+            >
+              {comment.postedBy.firstName} {comment.postedBy.lastName}
             </Link>
           </span>
-          <span className="badge bg-info ms-3">Level 5</span>
+          <span className="badge bg-danger ms-3">Level 5</span>
         </div>
-        <small className="text-muted ms-auto">12hr ago</small>
+        <small className="text-muted ms-auto">
+          <Moment fromNow>{comment.createdAt}</Moment>
+        </small>
       </div>
       <div className="text-muted fsize-14 mt-3">
-        <p>
-          {comment.content}
-        </p>
+        <p>{comment.content}</p>
       </div>
       <hr />
       <div className="d-flex flex-md-row flex-column w-100 align-items-md-center">
@@ -42,11 +46,11 @@ export const SingleComment = (props) => {
           </div>
           <div className="d-flex ms-3">
             <BiLike />
-            <span className="ms-1 small text-dark">12.2k</span>
+            <span className="ms-1 small text-dark">{comment.upvotes}</span>
           </div>
           <div className="d-flex ms-3">
             <BiDislike />
-            <span className="ms-1 small text-dakr">1k</span>
+            <span className="ms-1 small text-dakr">{comment.downvotes}</span>
           </div>
         </div>
         <div className="ms-sm-auto mt-2 mt-md-0">

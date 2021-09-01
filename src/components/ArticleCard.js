@@ -9,10 +9,16 @@ import {
 import parse from "html-react-parser";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
+import { useCallback, useState } from "react";
 
 export const ArticleCard = (props) => {
   const { t } = useTranslation();
-  const { contentType, ...post } = props;
+  const { contentType, collapsed, ...post } = props;
+  const [isCollapsed, setIsCollapsed] = useState(collapsed !== undefined ? collapsed : true);
+
+  const toggleCollapse = useCallback(() => {
+    setIsCollapsed((prevState) => !prevState);
+  }, []);
 
   return (
     <div className="card shadow-sm mb-4 border-0 rounded-0 bg-white p-4">
@@ -32,7 +38,14 @@ export const ArticleCard = (props) => {
         <div className="d-flex flex-column">
           <div className="d-flex justify-content-between align-items-baseline">
             <p className="mb-3 fsize-14 fw-700 pe-3">
-              <Link to="/profile" className="td-none text-primary">
+              <Link
+                to={`/profile/${
+                  post.questioner
+                    ? post.questioner.username
+                    : post.postedBy.username
+                }`}
+                className="td-none text-primary"
+              >
                 {post.questioner
                   ? `${post.questioner.firstName} ${post.questioner.lastName}`
                   : `${post.postedBy.firstName} ${post.postedBy.lastName}`}
@@ -81,12 +94,19 @@ export const ArticleCard = (props) => {
             </>
           ) : (
             <>
-              <p className="text-muted fsize-14 mb-0">
-                {parse(post.content)}
-                <button className="btn text-primary p-0 px-1 fsize-14 td-none">
-                  Read more..
+              <div className="text-muted fsize-14 mb-0">
+                <div
+                  className={isCollapsed ? "collapsed" : "collapsed expanded"}
+                >
+                  {parse(post.content)}
+                </div>
+                <button
+                  className="btn text-primary p-0 px-1 fsize-14 td-none"
+                  onClick={toggleCollapse}
+                >
+                  Read {isCollapsed ? "more" : "less"}..
                 </button>
-              </p>
+              </div>
               <hr />
               <div className="d-flex flex-md-row flex-column w-100 align-items-md-center">
                 <div className="d-flex align-items-center">
@@ -99,7 +119,10 @@ export const ArticleCard = (props) => {
                   />
                   <small className="text-muted ms-2">
                     {post.questioner ? "Answered" : "Posted"} by{" "}
-                    <Link to="/profile" className="td-none text-primary">
+                    <Link
+                      to={`/profile/${post.postedBy.username}`}
+                      className="td-none text-primary"
+                    >
                       {post.postedBy.firstName} {post.postedBy.lastName}
                     </Link>
                   </small>

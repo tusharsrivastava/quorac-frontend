@@ -35,6 +35,7 @@ export const fetchSinglePost = createAsyncThunk("fetchSinglePost", async (payloa
       },
       postedBy: {
         id: post.createdBy.id,
+        username: post.createdBy.username,
         firstName: post.createdBy.firstName,
         lastName: post.createdBy.lastName,
         on: post.createdAt,
@@ -42,6 +43,7 @@ export const fetchSinglePost = createAsyncThunk("fetchSinglePost", async (payloa
       questioner: post.parent
         ? {
             id: post.parent?.createdBy.id,
+            username: post.createdBy.username,
             firstName: post.parent?.createdBy.firstName,
             lastName: post.parent?.createdBy.lastName,
             on: post.parent?.createdAt,
@@ -57,13 +59,16 @@ export const fetchSinglePost = createAsyncThunk("fetchSinglePost", async (payloa
 export const addComment = createAsyncThunk("addComment", async (payload, { dispatch }) => {
   const { postId, comment } = payload;
 
+  const response = await api.post(`/posts/${postId}/comments`, { content: comment });
+
   dispatch(incrementCommentsCount());
 
-  return {
-    id: 1,
-    postId: postId,
-    content: comment,
-  };
+  return response.data;
+});
+
+export const fetchComments = createAsyncThunk("fetchComments", async (payload, { dispatch }) => {
+  const response = await api.get(`/posts/${payload}/comments`);
+  return response.data;
 });
 
 const singlePost = createSlice({
@@ -71,6 +76,7 @@ const singlePost = createSlice({
   initialState: {
     post: {},
     comments: [],
+    commentCount: 0,
     isLoading: false,
     isError: false,
     isNew: false,
@@ -138,6 +144,18 @@ const singlePost = createSlice({
           ...state.comments,
           action.payload,
         ],
+      };
+    });
+    builder.addCase(fetchComments.fulfilled, (state, action) => {
+      return {
+        ...state,
+        comments: action.payload.data,
+        commentCount: action.payload.count,
+        isLoading: false,
+        isError: false,
+        isNew: false,
+        isEditing: false,
+        error: null,
       };
     });
   },

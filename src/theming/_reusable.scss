@@ -177,6 +177,15 @@
     color: #999;
 }
 
+.collapsed {
+    max-height: 2rem;
+    overflow: hidden;
+    &.expanded {
+        max-height: none;
+        overflow: visible;
+    }
+}
+
 .customTable {
     border: 0;
     tbody {

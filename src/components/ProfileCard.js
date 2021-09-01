@@ -1,17 +1,19 @@
 import { BiPlusCircle } from "react-icons/bi";
 
 const ProfileMain = (props) => {
+    const { viewOnly, user } = props;
+
     return (
     <>
       <img src="/person.png" className="img-fluid rounded-circle border" width="100" alt="User avatar" />
       <div className="d-flex flex-column mt-3 pb-3 border-bottom">
         <div className="d-flex flex-md-row flex-column justify-content-between">
-            <span className="fw-700">Akash Raj Dahal</span>
+            <span className="fw-700">{user.firstName} {user.lastName}</span>
             <span className="badge bg-danger align-content-center mt-1 align-self-start mb-1 mb-md-0">
                 Level 5
             </span>
         </div>
-        <span className="text-primary">@akashraj</span>
+        <span className="text-primary">@{user.username}</span>
         <p className="fsize-14 text-muted mt-2 mb-4">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugiat facere adipisci modi aspernatur. Modi.
         </p>
@@ -25,6 +27,8 @@ const ProfileMain = (props) => {
 }
 
 const ProfileIntro = (props) => {
+    const { viewOnly } = props;
+
     return (
       <div className="d-flex flex-column mt-3 pb-3 border-bottom">
         <h5>Intro</h5>
@@ -60,7 +64,9 @@ const ProfileIntro = (props) => {
             </tr>
           </tbody>
         </table>
+        {viewOnly ? (<></>) : (
         <button className="btn btn-outline-dark fsize-14">Edit Profile</button>
+        )}
       </div>
     );
 };
@@ -120,11 +126,13 @@ const ProfileAdditionalInfo = (props) => {
 
 
 export const ProfileCard = (props) => {
+  const { isEditable, user } = props;
+
   return (
     <div className="card shadow-sm mb-4 border-0 rounded-0 bg-white p-4">
-      <ProfileMain />
-      <ProfileIntro />
-      <ProfileAdditionalInfo />
+      <ProfileMain user={user} viewOnly={!isEditable} />
+      <ProfileIntro user={user} viewOnly={!isEditable} />
+      <ProfileAdditionalInfo user={user} viewOnly={!isEditable} />
     </div>
   );
 };

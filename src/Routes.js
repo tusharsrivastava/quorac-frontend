@@ -93,6 +93,13 @@ const siteRoutes = [
     showInFooter: false,
   },
   {
+    path: "/profile/:username",
+    title: "General User Profile",
+    comp: React.lazy(() => import("./pages/Profile")),
+    showInNav: false,
+    showInFooter: false,
+  },
+  {
     path: "/new",
     title: "Create New Post",
     comp: React.lazy(() => import("./pages/NewPost")),

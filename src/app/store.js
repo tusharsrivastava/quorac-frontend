@@ -4,6 +4,7 @@ import subcategoriesReducer from "./features/subcategories";
 import postsReducer from "./features/posts";
 import singlePostReducer from "./features/singlepost";
 import newPostReducer from "./features/newpost";
+import userProfileReducer from "./features/profile";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     posts: postsReducer,
     singlePost: singlePostReducer,
     newPost: newPostReducer,
+    userProfile: userProfileReducer,
   }
 });

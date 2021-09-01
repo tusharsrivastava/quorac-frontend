@@ -7,7 +7,7 @@ import siteRoutes from "../Routes";
 import { CommentsSection, PostComment, SingleComment } from "../components/ArticleComments";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchSinglePost } from "../app/features/singlepost";
+import { fetchSinglePost, fetchComments } from "../app/features/singlepost";
 
 const SingleArticle = (props) => {
   const { id } = props.match.params;
@@ -16,6 +16,7 @@ const SingleArticle = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchSinglePost(id));
+    dispatch(fetchComments(id));
   },[dispatch, id]);
 
   return (
@@ -26,8 +27,8 @@ const SingleArticle = (props) => {
       leftSidebar={<LeftSidebar routes={siteRoutes} />}
       rightSidebar={<RightSidebar />}
     >
-      <Post post={post} />
-      <PostComment />
+      <Post post={post} collapsed={false} />
+      <PostComment postId={id} />
       <CommentsSection>
         {comments.length > 0 &&
           comments.map((comment) => (

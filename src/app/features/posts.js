@@ -57,16 +57,20 @@ export const fetchPosts = createAsyncThunk("fetchPosts", async (payload) => {
     },
     postedBy: {
       id: post.createdBy.id,
+      username: post.createdBy.username,
       firstName: post.createdBy.firstName,
       lastName: post.createdBy.lastName,
       on: post.createdAt,
     },
-    questioner: post.parent ? {
-      id: post.parent?.createdBy.id,
-      firstName: post.parent?.createdBy.firstName,
-      lastName: post.parent?.createdBy.lastName,
-      on: post.parent?.createdAt,
-    } : null,
+    questioner: post.parent
+      ? {
+          id: post.parent?.createdBy.id,
+          username: post.createdBy.username,
+          firstName: post.parent?.createdBy.firstName,
+          lastName: post.parent?.createdBy.lastName,
+          on: post.parent?.createdAt,
+        }
+      : null,
     category: post.category,
     tags: post.tags,
   }));
