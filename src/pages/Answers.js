@@ -6,7 +6,7 @@ import siteRoutes from "../Routes";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchPosts } from "../app/features/posts";
+import { downvotePost, fetchPosts, upvotePost } from "../app/features/posts";
 import FilterCard from "../components/FilterCard";
 
 const Answers = (props) => {
@@ -28,7 +28,14 @@ const Answers = (props) => {
       {posts.length > 0 &&
         posts
           .filter((p) => p.type === "post")
-          .map((post) => <Post key={post.id} post={post} />)}
+          .map((post) => (
+            <Post
+              key={post.id}
+              post={post}
+              onUpvote={() => dispatch(upvotePost(post))}
+              onDownvote={() => dispatch(downvotePost(post))}
+            />
+          ))}
       {posts.length === 0 && (
         <div className="text-center">
           <img

@@ -1,10 +1,10 @@
 import history from '../history';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { filterByTags } from './posts';
-import api from "../api";
+import { get } from "../api";
 
 export const showSubCategory = createAsyncThunk("showSubCategory", async (payload) => {
-  const subcategories = await api.get(`categories/${payload}/subcategories`);
+  const subcategories = await get(`categories/${payload}/subcategories`);
   return subcategories.data.map(subcategory => ({
     id: subcategory.id,
     title: subcategory.name,

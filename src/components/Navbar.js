@@ -2,7 +2,16 @@ import { useState, useCallback } from "react";
 import { withTheme } from "styled-components";
 import { useTranslation } from "react-i18next";
 import { Link, withRouter } from 'react-router-dom';
-import { BiSearchAlt2, BiGlobe, BiBell, BiDollar, BiEdit } from 'react-icons/bi';
+import { auth } from "../app/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import {
+  BiSearchAlt2,
+  BiGlobe,
+  BiBell,
+  BiDollar,
+  BiEdit,
+  BiLogInCircle,
+} from "react-icons/bi";
 import { languages } from "../i18n";
 
 const ProfileLink = (props) => {
@@ -42,7 +51,7 @@ const ProfileLink = (props) => {
           </Link>
         </li>
         <li>
-          <Link className="dropdown-item px-3 py-2 border-0 fsize-14" to="/">
+          <Link to="/auth/logout" className="dropdown-item px-3 py-2 border-0 fsize-14">
             Logout
           </Link>
         </li>
@@ -79,7 +88,8 @@ const LangSwitcher = (props) => {
           lprops["className"] =
             "p-2 d-flex justify-content-between align-items-baseline";
 
-          if (i18n.language === lang.key) lprops["className"] += " bg-primary text-white";
+          if (i18n.language === lang.key)
+            lprops["className"] += " bg-primary text-white";
           return (
             <li {...lprops} onClick={() => i18n.changeLanguage(lang.key)}>
               {lang.name}
@@ -97,6 +107,8 @@ const LangSwitcher = (props) => {
 const _Navbar = (props) => {
   const { t } = useTranslation();
   const { routes, match } = props;
+  // eslint-disable-next-line no-unused-vars
+  const [user, loading, error] = useAuthState(auth);
 
   return (
     <header className="sticky-top">
@@ -143,7 +155,10 @@ const _Navbar = (props) => {
               </div>
             </form>
 
-            <Link to="/new" className="btn btn-primary flex-grow-0 flex-shrink-0">
+            <Link
+              to="/new"
+              className="btn btn-primary flex-grow-0 flex-shrink-0"
+            >
               <BiEdit /> {t("New Post")}
             </Link>
 
@@ -151,19 +166,36 @@ const _Navbar = (props) => {
               <li className="mx-xl-3 mx-2">
                 <LangSwitcher />
               </li>
-              <li className="mx-xl-3 mx-2">
-                <button className="btn btn-link p-0 text-dark">
-                  <BiBell />
-                </button>
-              </li>
-              <li className="mx-xl-3 mx-2">
-                <button className="btn btn-link p-0 text-dark">
-                  <BiDollar />
-                </button>
-              </li>
-              <li className="ms-xl-3 ms-2">
-                <ProfileLink />
-              </li>
+              {loading ? (
+                <></>
+              ) : user ? (
+                <>
+                  <li className="mx-xl-3 mx-2">
+                    <button className="btn btn-link p-0 text-dark">
+                      <BiBell />
+                    </button>
+                  </li>
+                  <li className="mx-xl-3 mx-2">
+                    <button className="btn btn-link p-0 text-dark">
+                      <BiDollar />
+                    </button>
+                  </li>
+                  <li className="ms-xl-3 ms-2">
+                    <ProfileLink />
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="ms-xl-3 mx-2">
+                    <Link
+                      to="/auth/login"
+                      className="btn btn-primary text-white flex-grow-0 flex-shrink-0"
+                    >
+                      <BiLogInCircle /> {t("Login")}
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
           <div className="ms-auto d-md-none d-block">

@@ -1,11 +1,9 @@
 import React, { useState, useRef } from "react";
 import JoditEditor from "jodit-react";
-import { useTranslation } from "react-i18next";
 import { useEffect, useCallback } from "react";
 import { useField } from "formik";
 
 const _PostCreator = (props) => {
-  const { t } = useTranslation();
   const { isHtml } = props;
   // eslint-disable-next-line no-unused-vars
   const [field, meta, helpers] = useField(props.name);

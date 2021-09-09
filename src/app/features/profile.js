@@ -1,9 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../api";
+import { get } from "../api";
 
 export const fetchUserProfile = createAsyncThunk("fetchUserProfile", async (payload) => {
-  const response = await api.get(`/users/${payload}`);
-  return response.data;
+  if (!payload) {
+    const response = await get(`/users`);
+    return response.data;
+  } else {
+    const response = await get(`/users/${payload}`);
+    return response.data;
+  }
 });
 
 const userProfile = createSlice({

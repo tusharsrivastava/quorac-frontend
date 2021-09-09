@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import history from "../history";
 import { fetchPosts, filterByCategory } from "./posts";
-import api from '../api';
+import { get } from '../api';
 
 import { showSubCategory, hideSubCategory } from "./subcategories";
 
 export const fetchCategories = createAsyncThunk("fetchCategories", async () => {
-  const categories = await api.get('/categories');
+  const categories = await get('/categories');
   return categories.data.map(category => ({
 
       id: category.id,
@@ -21,82 +21,6 @@ export const fetchCategories = createAsyncThunk("fetchCategories", async () => {
         }
       ]
   }));
-  /*
-  return [
-    {
-      title: "Arts and Humanities",
-      key: "art",
-      active: false,
-      actions: [
-        {
-          title: "+Follow (6.4k)",
-          theme: "primary",
-          type: "follow",
-        },
-      ],
-    },
-    {
-      title: "Beauty and Style",
-      key: "beauty",
-      active: false,
-      actions: [
-        {
-          title: "+Follow (1.3m)",
-          theme: "primary",
-          type: "follow",
-        },
-      ],
-    },
-    {
-      title: "Business and Finance",
-      key: "business",
-      active: false,
-      actions: [
-        {
-          title: "-Unfollow (3.4k)",
-          theme: "danger",
-          type: "unfollow",
-        },
-      ],
-    },
-    {
-      title: "Cars and Transportation",
-      key: "transport",
-      active: false,
-      actions: [
-        {
-          title: "+Follow (1.2k)",
-          theme: "primary",
-          type: "follow",
-        },
-      ],
-    },
-    {
-      title: "Computers and Internet",
-      key: "internet",
-      active: false,
-      actions: [
-        {
-          title: "-Unfollow (17.2k)",
-          theme: "danger",
-          type: "unfollow",
-        },
-      ],
-    },
-    {
-      title: "Consumer Electronics",
-      key: "electronics",
-      active: false,
-      actions: [
-        {
-          title: "+Follow (1.3k)",
-          theme: "primary",
-          type: "follow",
-        },
-      ],
-    },
-  ];
-  */
 });
 
 export const setActiveCategory = createAsyncThunk("setActiveCategory", async(payload, { dispatch, getState }) => {

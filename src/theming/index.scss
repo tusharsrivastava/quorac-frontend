@@ -57,6 +57,8 @@ $theme-colors: (
 // Import Mixins
 @import "./mixins";
 @import "./reusable";
+// Import Auth Pages
+@import "./auth";
 html,
 body {
     font-family: 'Open Sans','Mukta', sans-serif;

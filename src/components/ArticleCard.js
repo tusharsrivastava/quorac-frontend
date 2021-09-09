@@ -26,7 +26,7 @@ export const ArticleCard = (props) => {
         <div className="d-flex flex-column align-items-center pe-3">
           <div className="d-flex align-items-center">
             <img
-              src="/person.png"
+              src={`${(post.questioner? post.questioner.profileThumbnail : post.postedBy.profileThumbnail) || "/person.png"}`}
               width="30"
               height="30"
               alt="user avatar"
@@ -52,7 +52,7 @@ export const ArticleCard = (props) => {
               </Link>
             </p>
             <span className="badge bg-danger rounded-0 text-light">
-              Level 5
+              Level {post.questioner ? post.questioner.level : post.postedBy.level}
             </span>
             <small className="text-muted ms-md-4 ms-2">
               {post.questioner ? "Asked" : "Posted"}:{" "}
@@ -65,9 +65,17 @@ export const ArticleCard = (props) => {
       </div>
       <div className="d-flex">
         <div className="d-flex flex-column align-items-center pe-4">
-          <BiUpArrowAlt size="1.25rem" />
-          <span className="text-primary">{post.statistics.upvotes}</span>
-          <BiDownArrowAlt size="1.25rem" />
+          <BiUpArrowAlt
+            size="1.25rem"
+            onClick={props.onUpvote}
+            style={{ cursor: "pointer" }}
+          />
+          <span className="text-primary">{post.statistics.score}</span>
+          <BiDownArrowAlt
+            size="1.25rem"
+            onClick={props.onDownvote}
+            style={{ cursor: "pointer" }}
+          />
         </div>
         <div className="d-flex flex-column w-100">
           <div className="d-flex justify-content-between align-items-baseline">
@@ -83,7 +91,7 @@ export const ArticleCard = (props) => {
           {contentType === "Unanswered" ? (
             <>
               <p className="fsize-14 fw-500 mb-3 unanswered-info">
-                This Question is unanswered.
+                {t("This Question is unanswered")}.
               </p>
               <Link
                 to={`/answer/${post.id}`}

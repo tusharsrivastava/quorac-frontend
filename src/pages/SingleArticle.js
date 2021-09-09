@@ -7,7 +7,7 @@ import siteRoutes from "../Routes";
 import { CommentsSection, PostComment, SingleComment } from "../components/ArticleComments";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchSinglePost, fetchComments } from "../app/features/singlepost";
+import { fetchSinglePost, fetchComments, upvotePost, downvotePost, upvoteComment, downvoteComment } from "../app/features/singlepost";
 
 const SingleArticle = (props) => {
   const { id } = props.match.params;
@@ -27,12 +27,22 @@ const SingleArticle = (props) => {
       leftSidebar={<LeftSidebar routes={siteRoutes} />}
       rightSidebar={<RightSidebar />}
     >
-      <Post post={post} collapsed={false} />
+      <Post
+        post={post}
+        collapsed={false}
+        onUpvote={() => dispatch(upvotePost(post))}
+        onDownvote={() => dispatch(downvotePost(post))}
+      />
       <PostComment postId={id} />
       <CommentsSection>
         {comments.length > 0 &&
           comments.map((comment) => (
-            <SingleComment key={comment.id} comment={comment} />
+            <SingleComment
+              key={comment.id}
+              comment={comment}
+              onUpvote={() => dispatch(upvoteComment({ postId: post.id, comment}))}
+              onDownvote={() => dispatch(downvoteComment({ postId: post.id, comment}))}
+            />
           ))}
         {comments.length === 0 && (
           <div className="text-center">

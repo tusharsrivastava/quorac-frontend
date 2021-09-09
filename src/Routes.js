@@ -113,6 +113,34 @@ const siteRoutes = [
     showInNav: false,
     showInFooter: false,
   },
+  {
+    path: "/auth/login",
+    title: "Login to QuoraC",
+    comp: React.lazy(() => import("./pages/auth/Login")),
+    showInNav: false,
+    showInFooter: false,
+  },
+  {
+    path: "/auth/logout",
+    title: "Logout from QuoraC",
+    comp: React.lazy(() => import("./pages/auth/Logout")),
+    showInNav: false,
+    showInFooter: false,
+  },
+  {
+    path: "/auth/register",
+    title: "Register to QuoraC",
+    comp: React.lazy(() => import("./pages/auth/Register")),
+    showInNav: false,
+    showInFooter: false,
+  },
+  {
+    path: "/auth/reset",
+    title: "Reset Account | QuoraC",
+    comp: React.lazy(() => import("./pages/auth/Reset")),
+    showInNav: false,
+    showInFooter: false,
+  },
 ];
 
 export const defaultRoute = siteRoutes[0];

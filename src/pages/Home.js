@@ -9,14 +9,14 @@ import siteRoutes from "../Routes";
 import FilterCard from "../components/FilterCard";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchPosts } from "../app/features/posts";
+import { downvotePost, fetchPosts, upvotePost } from "../app/features/posts";
 
 const Home = (props) => {
   const dispatch = useDispatch();
   const { posts } = useSelector(state => state.posts);
 
   useEffect(() => {
-    dispatch(fetchPosts());
+    dispatch(fetchPosts({ type: false }));
   }, [dispatch]);
 
   return (
@@ -28,7 +28,14 @@ const Home = (props) => {
     >
       <FilterCard />
       {posts.length > 0 &&
-        posts.map((post) => <Post post={post} key={post.id} />)}
+        posts.map((post) => (
+          <Post
+            post={post}
+            key={post.id}
+            onUpvote={() => dispatch(upvotePost(post))}
+            onDownvote={() => dispatch(downvotePost(post))}
+          />
+        ))}
       {posts.length === 0 && (
         <div className="text-center">
           <img

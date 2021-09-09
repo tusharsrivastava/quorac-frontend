@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../api";
+import { post } from "../api";
 
 export const createNewPost = createAsyncThunk("createNewPost", async (payload) => {
-  const response = await api.post("/posts", payload);
+  const response = await post("/posts", payload);
   return response.data;
 });
 
@@ -11,7 +11,7 @@ export const postNewAnswer = createAsyncThunk(
   async (payload) => {
     const { postId, content } = payload;
 
-    const response = await api.post(`/posts/${postId}/answers`, { type: "answer", content: content, title: "" });
+    const response = await post(`/posts/${postId}/answers`, { type: "answer", content: content, title: "" });
     return response.data;
   }
 );
