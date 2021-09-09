@@ -1,4 +1,4 @@
-import { auth, logout } from "../../app/firebase";
+import { auth, logout } from "../../app/fbase";
 import { useHistory } from "react-router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect } from "react";

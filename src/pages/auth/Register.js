@@ -5,7 +5,7 @@ import {
   auth,
   registerWithEmailAndPassword,
   signInWithGoogle,
-} from "../../app/firebase";
+} from "../../app/fbase";
 
 function Register() {
   const [email, setEmail] = useState("");

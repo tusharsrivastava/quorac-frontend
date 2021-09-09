@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { withTheme } from "styled-components";
 import { useTranslation } from "react-i18next";
 import { Link, withRouter } from 'react-router-dom';
-import { auth } from "../app/firebase";
+import { auth } from "../app/fbase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
   BiSearchAlt2,
