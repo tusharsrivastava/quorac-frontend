@@ -8,6 +8,7 @@ const api = axios.create({
 
 export const getHeaders = () => {
   const token = localStorage.getItem("token");
+  console.log('Token', token);
   const headers = {};
 
   if (token) {
@@ -18,15 +19,29 @@ export const getHeaders = () => {
 }
 
 export const get = async (url) => {
-  return await api.get(url, {
-    headers: getHeaders(),
-  });
+  try {
+    return await api.get(url, {
+      headers: getHeaders(),
+    });
+  } catch (error) {
+    if (error.response.status === 401) {
+      window.location.href = "/auth/login";
+    }
+    throw error;
+  }
 }
 
 export const post = async (url, data) => {
-  return await api.post(url, data, {
-    headers: getHeaders(),
-  });
+  try {
+    return await api.post(url, data, {
+      headers: getHeaders(),
+    });
+  } catch (error) {
+    if (error.response.status === 401) {
+      window.location.href = "/auth/login";
+    }
+    throw error;
+  }
 };
 
 export default api;

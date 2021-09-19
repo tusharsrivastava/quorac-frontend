@@ -8,7 +8,6 @@ import { showSubCategory, hideSubCategory } from "./subcategories";
 export const fetchCategories = createAsyncThunk("fetchCategories", async () => {
   const categories = await get('/categories');
   return categories.data.map(category => ({
-
       id: category.id,
       title: category.name,
       key: category.key,

@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import { auth, sendPasswordResetEmail } from "../../app/fbase";
+import { useApplicationAuth, sendPasswordResetEmail } from "../../app/fbase";
 
 
 function Reset() {
   const [email, setEmail] = useState("");
   // eslint-disable-next-line no-unused-vars
-  const [user, loading, error] = useAuthState(auth);
+  const [user, isAuthenticated, loading, error] = useApplicationAuth();
   const history = useHistory();
 
   useEffect(() => {
     if (loading) return;
-    if (user) history.replace("/");
-  }, [user, loading, history]);
+    if (isAuthenticated) history.replace("/");
+  }, [isAuthenticated, loading, history]);
 
   return (
     <div className="reset">

@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase";
-import api from './api';
+import api from "./api";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDgfLEWgyimBkQxWP69-4stlJI7lhlsa4s",
@@ -16,18 +18,28 @@ const auth = app.auth();
 const db = app.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-const _signInApplication = async (currentUser) => {
+const _signInApplication = async (currentUser, hard=true) => {
+  if (!hard) {
+    const localToken = localStorage.getItem("token");
+    if (localToken) {
+      return;
+    }
+  }
+
   const idToken = await currentUser.getIdToken();
   const headers = {};
   if (idToken) {
     headers.Authorization = `Bearer ${idToken}`;
-    headers['x-social'] = 'true';
+    headers["x-social"] = "true";
   }
 
-  const response = await api.post('/auth/login', {}, { headers });
+  const response = await api.post("/auth/login", {}, { headers });
   const localToken = response.data.access_token;
-  localStorage.setItem('token', localToken);
-}
+  return await new Promise((resolve) => {
+    localStorage.setItem("token", localToken);
+    resolve();
+  });
+};
 
 const signInWithGoogle = async () => {
   try {
@@ -90,8 +102,39 @@ const sendPasswordResetEmail = async (email) => {
 };
 
 const logout = async () => {
+  localStorage.removeItem("token");
   await auth.signOut();
-  localStorage.removeItem('token');
+};
+
+const useApplicationAuth = () => {
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [firebaseUser, firebaseLoading, error] = useAuthState(auth);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (firebaseLoading) {
+      return;
+    }
+
+    if (firebaseUser) {
+      _signInApplication(firebaseUser, false).then(() => {
+        setIsAuthenticated(true);
+        setUser(firebaseUser);
+      });
+    } else {
+      setIsAuthenticated(false);
+      setUser(null);
+    }
+    setLoading(false);
+  }, [firebaseUser, firebaseLoading]);
+
+  return [
+    user,
+    isAuthenticated,
+    loading,
+    error,
+  ];
 };
 
 export {
@@ -102,4 +145,5 @@ export {
   registerWithEmailAndPassword,
   sendPasswordResetEmail,
   logout,
+  useApplicationAuth,
 };

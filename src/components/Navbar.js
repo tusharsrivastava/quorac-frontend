@@ -2,8 +2,7 @@ import { useState, useCallback } from "react";
 import { withTheme } from "styled-components";
 import { useTranslation } from "react-i18next";
 import { Link, withRouter } from 'react-router-dom';
-import { auth } from "../app/fbase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useApplicationAuth } from "../app/fbase";
 import {
   BiSearchAlt2,
   BiGlobe,
@@ -109,7 +108,7 @@ const _Navbar = (props) => {
   const { t } = useTranslation();
   const { routes, match } = props;
   // eslint-disable-next-line no-unused-vars
-  const [user, loading, error] = useAuthState(auth);
+  const [user, isAuthenticated, loading, error] = useApplicationAuth();
 
   return (
     <header className="sticky-top">
@@ -170,7 +169,7 @@ const _Navbar = (props) => {
               </li>
               {loading ? (
                 <></>
-              ) : user ? (
+              ) : isAuthenticated ? (
                 <>
                   <li className="mx-xl-3 mx-2">
                     <button className="btn btn-link p-0 text-dark">

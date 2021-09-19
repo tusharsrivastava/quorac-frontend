@@ -16,6 +16,14 @@ export const updateProfile = createAsyncThunk("updateProfile", async (payload) =
   return response.data;
 });
 
+export const toggleFollow = createAsyncThunk(
+  "toggleFollow",
+  async (payload) => {
+    const response = await post("/users/" + payload + "/follow/toggle");
+    return response.data;
+  }
+);
+
 export const fetchCompanies = async (payload) => {
   const { term, limit } = payload;
   const response = await get(`/users/companies?term=${term}&limit=${limit}`);
@@ -63,24 +71,13 @@ export const loadHobbies = createAsyncThunk("loadHobbies", fetchHobbies);
 const userProfile = createSlice({
   name: "userProfile",
   initialState: {
-    user: {
-      id: "ee609adc-ff84-44e9-90d2-63a3e6ab7724",
-      username: "anonymous",
-      email: null,
-      profileThumbnail: null,
-      firstName: "Anonymous",
-      lastName: "User",
-      isVerified: false,
-      createdAt: "2021-08-31T10:53:39.347Z",
-      updatedAt: "2021-08-31T10:53:39.347Z",
-      profile: null,
-    },
+    user: null,
     companies: [],
     schools: [],
     languages: [],
     hobbies: [],
     isLoading: false,
-    error: null
+    error: null,
   },
   extraReducers: {
     [fetchUserProfile.pending]: (state, action) => {
@@ -128,8 +125,19 @@ const userProfile = createSlice({
     },
     [loadHobbies.rejected]: (state, action) => {
       state.hobbies = [];
+    },
+    [toggleFollow.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [toggleFollow.fulfilled]: (state, action) => {
+      state.user = action.payload;
+      state.isLoading = false;
+    },
+    [toggleFollow.rejected]: (state, action) => {
+      state.error = action.payload;
+      state.isLoading = false;
     }
-  }
+  },
 });
 
 export default userProfile.reducer;

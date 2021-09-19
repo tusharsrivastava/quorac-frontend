@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { auth, signInWithEmailAndPassword, signInWithGoogle } from "../../app/fbase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useApplicationAuth, signInWithEmailAndPassword, signInWithGoogle } from "../../app/fbase";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // eslint-disable-next-line no-unused-vars
-  const [user, loading, error] = useAuthState(auth);
+  const [user, isAuthenticated, loading, error] = useApplicationAuth();
   const history = useHistory();
 
   useEffect(() => {
@@ -15,8 +14,8 @@ function Login() {
       // maybe trigger a loading screen
       return;
     }
-    if (user) history.replace("/");
-  }, [user, loading, history]);
+    if (isAuthenticated) history.replace("/");
+  }, [isAuthenticated, loading, history]);
 
   return (
     <div className="login">

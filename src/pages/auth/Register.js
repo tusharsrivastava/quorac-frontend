@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useHistory } from "react-router-dom";
 import {
-  auth,
+  useApplicationAuth,
   registerWithEmailAndPassword,
   signInWithGoogle,
 } from "../../app/fbase";
@@ -12,7 +11,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   // eslint-disable-next-line no-unused-vars
-  const [user, loading, error] = useAuthState(auth);
+  const [user, isAuthenticated, loading, error] = useApplicationAuth();
   const history = useHistory();
 
   const register = () => {
@@ -22,8 +21,8 @@ function Register() {
 
   useEffect(() => {
     if (loading) return;
-    if (user) history.replace("/");
-  }, [user, loading, history]);
+    if (isAuthenticated) history.replace("/");
+  }, [isAuthenticated, loading, history]);
 
   return (
     <div className="register">

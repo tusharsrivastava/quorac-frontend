@@ -3,29 +3,38 @@ import { useState, useCallback } from 'react';
 import { Formik } from "formik";
 import Select from "../components/Select";
 import { useDispatch } from "react-redux";
-import { fetchCompanies, fetchHobbies, fetchSchools, fetchLanguages, updateProfile } from "../app/features/profile";
+import { fetchCompanies, fetchHobbies, fetchSchools, fetchLanguages, updateProfile, toggleFollow } from "../app/features/profile";
 
 const ProfileMain = (props) => {
     const { viewOnly, user } = props;
+    const dispatch = useDispatch();
 
     return (
     <>
-      <img src={`${user.profileThumbnail || '/person.png'}`} className="img-fluid rounded-circle border" width="100" alt="User avatar" />
+      <img src={`${user?.profileThumbnail || '/person.png'}`} className="img-fluid rounded-circle border" width="100" alt="User avatar" />
       <div className="d-flex flex-column mt-3 pb-3 border-bottom">
         <div className="d-flex flex-md-row flex-column justify-content-between">
-            <span className="fw-700">{user.firstName} {user.lastName}</span>
+            <span className="fw-700">{user?.firstName} {user?.lastName}</span>
             <span className="badge bg-danger align-content-center mt-1 align-self-start mb-1 mb-md-0">
-                Level {user.level}
+                Level {user?.level}
             </span>
         </div>
-        <span className="text-primary">@{user.username}</span>
+        <span className="text-primary">@{user?.username}</span>
         <p className="fsize-14 text-muted mt-2 mb-4">
-            {user.description || 'No description'}
+            {user?.description || 'No description'}
         </p>
         <div className="d-flex">
-            <span className="fw-500 fsize-14"><b>Following:</b> {user.followingCount}</span>
-            <span className="fw-500 fsize-14 ms-3"><b>Followers:</b> {user.followersCount}</span>
+            <span className="fw-500 fsize-14"><b>Following:</b> {user?.followingCount}</span>
+            <span className="fw-500 fsize-14 ms-3"><b>Followers:</b> {user?.followersCount}</span>
         </div>
+        {user !== null && user.isMe ? null : <div className="d-flex mt-2">
+          <button
+            onClick={() => dispatch(toggleFollow(user?.username))}
+            className={`btn btn-outline-${user?.isFollowed ? 'danger' : 'primary'} rounded-0 px-4 fsize-14 flex-grow-1 flex-shrink-0`}
+          >
+            {`${user?.isFollowed ? 'Unfollow' : 'Follow'} @${user?.username}`}
+          </button>
+        </div> }
       </div>
     </>
     );
@@ -224,7 +233,7 @@ const ProfileIntro = (props) => {
             <tr>
               <th>Works at</th>
               <td>
-                {user.profile
+                {user?.profile
                   ? user.profile.works
                     ? user.profile.works[0].company?.name
                     : "N/A"
@@ -234,7 +243,7 @@ const ProfileIntro = (props) => {
             <tr>
               <th>Studied at</th>
               <td>
-                {user.profile
+                {user?.profile
                   ? user.profile.educations
                     ? user.profile.educations[0].school?.name
                     : "N/A"
@@ -248,7 +257,7 @@ const ProfileIntro = (props) => {
             <tr>
               <th>Interest in</th>
               <td>
-                {user.profile
+                {user?.profile
                   ? user.profile.hobbies?.map((hobby) => (
                       <span className="badge bg-primary me-1">
                         {hobby.name}
@@ -264,7 +273,7 @@ const ProfileIntro = (props) => {
             <tr>
               <th>Languages known</th>
               <td>
-                {user.profile
+                {user?.profile
                   ? user.profile.languages?.map((lang) => (
                       <span className="badge bg-primary me-1">
                         {lang.name}
@@ -275,7 +284,7 @@ const ProfileIntro = (props) => {
             </tr>
             <tr>
               <th>Gender</th>
-              <td>{user.profile ? user.profile.gender : 'Unknown'}</td>
+              <td>{user?.profile ? user.profile.gender : 'Unknown'}</td>
             </tr>
           </tbody>
         </table>
