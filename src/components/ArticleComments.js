@@ -45,11 +45,19 @@ export const SingleComment = (props) => {
             <span className="ms-1 small text-dark">Reply</span>
           </div>
           <div className="d-flex ms-3">
-            <BiLike onClick={props.onUpvote} style={{ cursor: "pointer" }} />
+            <BiLike
+              onClick={props.onUpvote}
+              style={{ cursor: "pointer" }}
+              className={comment.hasUpvoted ? `text-success` : ``}
+            />
             <span className="ms-1 small text-dark">{comment.upvotes}</span>
           </div>
           <div className="d-flex ms-3">
-            <BiDislike onClick={props.onDownvote} style={{ cursor: "pointer" }} />
+            <BiDislike
+              onClick={props.onDownvote}
+              style={{ cursor: "pointer" }}
+              className={comment.hasDownvoted ? `text-danger` : ``}
+            />
             <span className="ms-1 small text-dakr">{comment.downvotes}</span>
           </div>
         </div>

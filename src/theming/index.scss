@@ -7,13 +7,11 @@
 //@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/variables";
-
 // $primary: #809848;
 //$primary: #3D5AF0;
 $primary: #551a8b;
 $blue: $primary;
 $secondary: #E8EBFB;
-
 $dark: black;
 $warning: #FFC96B;
 $text-muted: #616161;
@@ -22,10 +20,8 @@ $red: #DD1C1A;
 $danger: $red;
 $green: #0fbe7b;
 $success: $green;
-
 $ui-01: #F2F2F2;
 $ui-03: #DADADA;
-
 $dropdown-link-active-bg: transparent;
 $link-color: $primary;
 $link-hover-color: $primary;
@@ -34,24 +30,19 @@ $small-font-size: 0.75rem;
 $nav-pills-link-active-bg: $primary;
 $nav-link-color: $text-muted;
 $nav-pills-border-radius: 0;
-
 $headings-font-family: "Lora";
 $headings-font-style: normal;
 $headings-font-weight: 600;
-
-$theme-colors: ( 
-    primary: $primary,
-    dark: $dark,
-    dropdown-link-active-bg: $dropdown-link-active-bg,
-    link-hover-color: $link-hover-color,
-    text-muted: $text-muted,
-    danger: $danger,
-    success: $success,
-    info: $info,
-    green: $green,
-    warning: $warning
-);
-
+$theme-colors: ( primary: $primary,
+dark: $dark,
+dropdown-link-active-bg: $dropdown-link-active-bg,
+link-hover-color: $link-hover-color,
+text-muted: $text-muted,
+danger: $danger,
+success: $success,
+info: $info,
+green: $green,
+warning: $warning);
 // Import Bootstrap
 @import "node_modules/bootstrap/scss/bootstrap.scss";
 // Import Mixins
@@ -59,9 +50,14 @@ $theme-colors: (
 @import "./reusable";
 // Import Auth Pages
 @import "./auth";
+:root {
+    --bs-secondary-rgb: 232, 235, 251;
+    --bs-primary-rgb: 85, 26, 139;
+}
+
 html,
 body {
-    font-family: 'Open Sans','Mukta', sans-serif;
+    font-family: 'Open Sans', 'Mukta', sans-serif;
     background-color: $gray-100;
 }
 

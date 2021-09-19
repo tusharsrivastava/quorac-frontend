@@ -229,7 +229,8 @@ const postsSlice = createSlice({
                 ...post.statistics,
                 upvotes: action.payload.upvotes,
                 downvotes: action.payload.downvotes,
-              }
+                score: action.payload.upvotes - action.payload.downvotes,
+              },
             };
           }
           return post;
@@ -249,6 +250,7 @@ const postsSlice = createSlice({
                 ...post.statistics,
                 upvotes: action.payload.upvotes,
                 downvotes: action.payload.downvotes,
+                score: action.payload.upvotes - action.payload.downvotes,
               },
             };
           }

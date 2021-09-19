@@ -33,6 +33,7 @@ export const fetchSinglePost = createAsyncThunk("fetchSinglePost", async (payloa
         upvotes: post.upvotes,
         downvotes: post.downvotes,
         comments: post.numComments,
+        score: post.upvotes - post.downvotes,
         views: post.numLikes,
       },
       postedBy: {
@@ -241,14 +242,15 @@ const singlePost = createSlice({
       return {
         ...state,
         post: {
-            ...state.post,
-            hasUpvoted: action.payload.hasUpvoted,
-            hasDownvoted: action.payload.hasDownvoted,
-            statistics: {
-              ...state.post.statistics,
-              upvotes: action.payload.upvotes,
-              downvotes: action.payload.downvotes,
-            },
+          ...state.post,
+          hasUpvoted: action.payload.hasUpvoted,
+          hasDownvoted: action.payload.hasDownvoted,
+          statistics: {
+            ...state.post.statistics,
+            upvotes: action.payload.upvotes,
+            downvotes: action.payload.downvotes,
+            score: action.payload.upvotes - action.payload.downvotes,
+          },
         },
       };
     });
@@ -263,6 +265,7 @@ const singlePost = createSlice({
             ...state.post.statistics,
             upvotes: action.payload.upvotes,
             downvotes: action.payload.downvotes,
+            score: action.payload.upvotes - action.payload.downvotes,
           },
         },
       };

@@ -13,6 +13,7 @@ import {
   BiLogInCircle,
 } from "react-icons/bi";
 import { languages } from "../i18n";
+import Search from "./Search";
 
 const ProfileLink = (props) => {
   const [isActive, setIsActive] = useState(false);
@@ -139,7 +140,8 @@ const _Navbar = (props) => {
                 })}
             </ul>
 
-            <form className="d-md-none d-lg-block px-4 w-60">
+            <Search />
+            {/* <form className="d-md-none d-lg-block px-4 w-60">
               <div className="form-group customForm">
                 <div className="input-group">
                   <span className="input-group-text" id="basic-addon1">
@@ -153,7 +155,7 @@ const _Navbar = (props) => {
                   />
                 </div>
               </div>
-            </form>
+            </form> */}
 
             <Link
               to="/new"

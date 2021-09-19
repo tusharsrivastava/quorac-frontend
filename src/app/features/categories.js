@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import history from "../history";
 import { fetchPosts, filterByCategory } from "./posts";
-import { get } from '../api';
+import { get, post } from '../api';
 
 import { showSubCategory, hideSubCategory } from "./subcategories";
 
@@ -15,9 +15,9 @@ export const fetchCategories = createAsyncThunk("fetchCategories", async () => {
       active: false,
       actions: [
         {
-          title: `+Follow (${category.followers})`,
-          theme: "primary",
-          type: "follow"
+          title: category.isFollowed ? `-Unfollow (${category.followers})` : `+Follow (${category.followers})`,
+          theme: category.isFollowed ? "danger" : "primary",
+          type: category.isFollowed ? "unfollow" : "follow",
         }
       ]
   }));
@@ -50,6 +50,11 @@ export const setActiveCategory = createAsyncThunk("setActiveCategory", async(pay
   return cats;
 });
 
+export const toggleFollowCategory = createAsyncThunk("toggleFollowCategory", async(payload) => {
+  const response = await post('/categories/' + payload + '/follow/toggle');
+  return response.data;
+});
+
 const categoriesSlice = createSlice({
   name: "categories",
   initialState: {
@@ -58,25 +63,6 @@ const categoriesSlice = createSlice({
     isError: false,
     error: null,
     selectedCategory: null,
-  },
-  reducers: {
-    toggleFollowCategory: (state, { payload }) => {
-      console.log(payload);
-      const cat = state.categories.find(cat => cat.key === payload);
-      if (cat !== undefined) {
-        cat.actions.forEach(a => {
-          if (a.type === "follow") {
-            a.type = "unfollow";
-            a.theme = "danger";
-            a.title = a.title.replace("+Follow", "-Unfollow");
-          } else {
-            a.type = "follow";
-            a.theme = "primary";
-            a.title = a.title.replace("-Unfollow", "+Follow");
-          }
-        });
-      }
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCategories.fulfilled, (state, action) => {
@@ -97,9 +83,46 @@ const categoriesSlice = createSlice({
         error: null,
       };
     });
+    builder.addCase(fetchCategories.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        error: action.payload,
+      };
+    });
+    builder.addCase(setActiveCategory.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        error: action.payload,
+      };
+    });
+    builder.addCase(toggleFollowCategory.fulfilled, (state, action) => {
+      return {
+        ...state,
+        categories: state.categories.map(cat => {
+          if (cat.id === action.payload.id) {
+            return {
+              ...cat,
+              followers: action.payload.followers,
+              actions: cat.actions.map(a => ({
+                ...a,
+                type: action.payload.isFollowed ? "unfollow" : "follow",
+                theme: action.payload.isFollowed ? "danger" : "primary",
+                title: action.payload.isFollowed ? `-Unfollow (${action.payload.followers})` : `+Follow (${action.payload.followers})`,
+              })),
+            };
+          }
+        return cat;
+        }),
+        isLoading: false,
+        isError: false,
+        error: null,
+      };
+    });
   },
 });
-
-export const { toggleFollowCategory } = categoriesSlice.actions;
 
 export default categoriesSlice.reducer;

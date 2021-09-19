@@ -2,6 +2,8 @@ import { useField } from "formik";
 import { useCallback } from "react";
 import RSelect from "react-select";
 import CreatableSelect from "react-select/creatable";
+import AsyncSelect from "react-select/async";
+import AsyncCreatableSelect from "react-select/async-creatable";
 
 const Select = (props) => {
   const { name, isCreatable, onChange, onFocus, onBlur, ...rest } = props;
@@ -19,7 +21,8 @@ const Select = (props) => {
       }));
     } else {
       payloadToSend = {
-        id: selectedOption.value
+        id: selectedOption.__isNew__ ? null : selectedOption.value,
+        name: selectedOption.label,
       };
     }
     setValue(payloadToSend);
@@ -44,6 +47,15 @@ const Select = (props) => {
   }, [onFocus]);
 
   if (isCreatable) {
+    if (props.isAsync) {
+      return <AsyncCreatableSelect
+        name={name}
+        onChange={handleLocalChange}
+        onFocus={handleLocalFocus}
+        onBlur={handleLocalBlur}
+        {...rest}
+        />;
+    }
     return (
       <CreatableSelect
         name={name}
@@ -53,6 +65,16 @@ const Select = (props) => {
         {...rest}
       />
     );
+  }
+
+  if (props.isAsync) {
+    return <AsyncSelect
+      name={name}
+      onChange={handleLocalChange}
+      onFocus={handleLocalFocus}
+      onBlur={handleLocalBlur}
+      {...rest}
+    />;
   }
 
   return (

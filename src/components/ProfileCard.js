@@ -2,6 +2,8 @@ import { BiPlusCircle } from "react-icons/bi";
 import { useState, useCallback } from 'react';
 import { Formik } from "formik";
 import Select from "../components/Select";
+import { useDispatch } from "react-redux";
+import { fetchCompanies, fetchHobbies, fetchSchools, fetchLanguages, updateProfile } from "../app/features/profile";
 
 const ProfileMain = (props) => {
     const { viewOnly, user } = props;
@@ -30,7 +32,8 @@ const ProfileMain = (props) => {
 }
 
 const ProfileIntro = (props) => {
-    const { viewOnly, toggleEditMode, isEditMode } = props;
+    const { viewOnly, user, toggleEditMode, isEditMode } = props;
+    const dispatch = useDispatch();
 
 
     if (isEditMode) {
@@ -42,9 +45,10 @@ const ProfileIntro = (props) => {
               works_at: "",
               studied_at: "",
               lives_in: "",
-              interests: [],
+              hobbies: [],
               knowledges: [],
               languages: [],
+              gender: "Female",
             }}
             validate={(values) => {
               const errors = {};
@@ -52,7 +56,27 @@ const ProfileIntro = (props) => {
             }}
             onSubmit={(values, { setSubmitting }) => {
               setSubmitting(true);
-              console.log(values);
+              const payload = {
+                works: [{ company: {
+                  id: values.works_at.id ? values.works_at.id : undefined,
+                  name: values.works_at.name,
+                } }],
+                educations: [{ school: {
+                  id: values.studied_at.id ? values.studied_at.id : undefined,
+                  name: values.studied_at.name,
+                 } }],
+                hobbies: values.hobbies.map(hobby => ({
+                  id: hobby.id ? hobby.id : undefined,
+                  name: hobby.name,
+                })),
+                languages: values.languages.map(language => ({
+                  id: language.id ? language.id : undefined,
+                  name: language.name,
+                })),
+                gender: values.gender.id,
+              };
+              console.log(payload);
+              dispatch(updateProfile(payload));
               toggleEditMode();
               setSubmitting(false);
             }}
@@ -70,37 +94,42 @@ const ProfileIntro = (props) => {
                   <tbody>
                     <tr>
                       <th>Works at</th>
-                      <td>
-                        <input
-                          type="text"
+                      <td style={{ minWidth: "14rem" }}>
+                        <Select
+                          className="fsize-14 rounded-0 ms-0 flex-fill"
+                          isCreatable
+                          isAsync
+                          defaultOptions={[]}
+                          loadOptions={(term) =>
+                            fetchCompanies({ term: term, limit: 10 })
+                          }
                           name="works_at"
-                          onChange={handleChange}
-                          value={values.works_at}
-                          className="form-control fsize-14 rounded-0 ms-0 flex-fill"
                         />
                       </td>
                     </tr>
                     <tr>
                       <th>Studied at</th>
                       <td>
-                        <input
-                          type="text"
+                        <Select
+                          className="fsize-14 rounded-0 ms-0"
+                          isCreatable
+                          isAsync
+                          defaultOptions={[]}
+                          loadOptions={(term) =>
+                            fetchSchools({ term: term, limit: 10 })
+                          }
                           name="studied_at"
-                          onChange={handleChange}
-                          value={values.studied_at}
-                          className="form-control fsize-14 rounded-0 ms-0 flex-fill"
                         />
                       </td>
                     </tr>
                     <tr>
                       <th>Lives in</th>
                       <td>
-                        <input
-                          type="text"
+                        <Select
+                          className="fsize-14 rounded-0 ms-0"
+                          isCreatable
+                          options={[]}
                           name="lives_in"
-                          onChange={handleChange}
-                          value={values.lives_in}
-                          className="form-control fsize-14 rounded-0 ms-0 flex-fill"
                         />
                       </td>
                     </tr>
@@ -110,9 +139,13 @@ const ProfileIntro = (props) => {
                         <Select
                           className="fsize-14 rounded-0 ms-0"
                           isMulti
+                          isAsync
                           isCreatable
-                          options={[]}
-                          name="interests"
+                          defaultOptions={[]}
+                          loadOptions={(term) =>
+                            fetchHobbies({ term: term, limit: 10 })
+                          }
+                          name="hobbies"
                         />
                       </td>
                     </tr>
@@ -134,33 +167,12 @@ const ProfileIntro = (props) => {
                         <Select
                           className="fsize-14 rounded-0 ms-0"
                           isMulti
+                          isAsync
                           isCreatable
-                          options={[
-                            {
-                              value: "English",
-                              label: "English",
-                            },
-                            {
-                              value: "Hindi",
-                              label: "Hindi",
-                            },
-                            {
-                              value: "French",
-                              label: "French",
-                            },
-                            {
-                              value: "Spanish",
-                              label: "Spanish",
-                            },
-                            {
-                              value: "German",
-                              label: "German",
-                            },
-                            {
-                              value: "Italian",
-                              label: "Italian",
-                            },
-                          ]}
+                          defaulOptions={[]}
+                          loadOptions={(term) =>
+                            fetchLanguages({ term: term, limit: 10 })
+                          }
                           name="languages"
                         />
                       </td>
@@ -172,12 +184,16 @@ const ProfileIntro = (props) => {
                           className="fsize-14 rounded-0 ms-0"
                           options={[
                             {
-                              value: "male",
+                              value: "Male",
                               label: "Male",
                             },
                             {
-                              value: "female",
+                              value: "Female",
                               label: "Female",
+                            },
+                            {
+                              value: "Others",
+                              label: "Others",
                             },
                           ]}
                           name="gender"
@@ -207,36 +223,71 @@ const ProfileIntro = (props) => {
           <tbody>
             <tr>
               <th>Works at</th>
-              <td>Company Name</td>
+              <td>
+                {user.profile
+                  ? user.profile.works
+                    ? user.profile.works[0].company?.name
+                    : "N/A"
+                  : "N/A"}
+              </td>
             </tr>
             <tr>
               <th>Studied at</th>
-              <td>College Name</td>
+              <td>
+                {user.profile
+                  ? user.profile.educations
+                    ? user.profile.educations[0].school?.name
+                    : "N/A"
+                  : "N/A"}
+              </td>
             </tr>
             <tr>
               <th>Lives in</th>
-              <td>Delhi, India</td>
+              <td>N/A</td>
             </tr>
             <tr>
               <th>Interest in</th>
-              <td>Hobbies, etc</td>
+              <td>
+                {user.profile
+                  ? user.profile.hobbies?.map((hobby) => (
+                      <span className="badge bg-primary me-1">
+                        {hobby.name}
+                      </span>
+                    ))
+                  : "N/A"}
+              </td>
             </tr>
             <tr>
               <th>Knows about</th>
-              <td>Something known</td>
+              <td>N/A</td>
             </tr>
             <tr>
               <th>Languages known</th>
-              <td>Hindi, English</td>
+              <td>
+                {user.profile
+                  ? user.profile.languages?.map((lang) => (
+                      <span className="badge bg-primary me-1">
+                        {lang.name}
+                      </span>
+                    ))
+                  : "N/A"}
+              </td>
             </tr>
             <tr>
               <th>Gender</th>
-              <td>Male</td>
+              <td>{user.profile ? user.profile.gender : 'Unknown'}</td>
             </tr>
           </tbody>
         </table>
-        {viewOnly ? (<></>) : (
-        <button className="btn btn-outline-dark fsize-14" onClick={toggleEditMode}>Edit Profile</button>
+        {viewOnly ? (
+          <></>
+        ) : (
+          <button
+            className="btn btn-outline-dark fsize-14"
+            onClick={toggleEditMode}
+          >
+            Edit Profile
+          </button>
         )}
       </div>
     );

@@ -4,43 +4,36 @@
             @content;
         }
     }
-
     @if $point==sm {
         @media (max-width: 576px) {
             @content;
         }
     }
-
     @if $point==tablet {
         @media (max-width: 767.9px) {
             @content;
         }
     }
-
     @if $point==min-tablet {
         @media (min-width: 768px) {
             @content;
         }
     }
-
     @if $point==desktop {
         @media (max-width: 991px) {
             @content;
         }
     }
-
     @if $point==min-desktop {
         @media (min-width: 991.1px) {
             @content;
         }
     }
-
     @if $point==wide {
         @media (max-width: 1200px) {
             @content;
         }
     }
-
     @if $point==min-wide {
         @media (min-width: 1200px) {
             @content;
@@ -62,11 +55,9 @@
     @-webkit-keyframes #{$name} {
         @content;
     }
-
     @-moz-keyframes #{$name} {
         @content;
     }
-
     @keyframes #{$name} {
         @content;
     }
@@ -81,7 +72,7 @@
     left: $left;
 }
 
-@mixin flexbox ($type : row, $align : center, $wrap : wrap) {
+@mixin flexbox ($type: row, $align: center, $wrap: wrap) {
     display: flex;
     flex-direction: $type;
     flex-wrap: $wrap;
@@ -90,18 +81,13 @@
 
 // Retina ready images
 @mixin retina-image($image, $width, $height) {
-
-    @media (min--moz-device-pixel-ratio: 1.3),
-    (-o-min-device-pixel-ratio: 2.6/2),
-    (-webkit-min-device-pixel-ratio: 1.3),
-    (min-device-pixel-ratio: 1.3),
-    (min-resolution: 1.3dppx) {
+    @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6/2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
         background-image: url($image);
         background-size: $width $height;
     }
 }
 
-@mixin font-generator($upto : 30) {
+@mixin font-generator($upto: 30) {
     @for $i from 10 through $upto {
         .font-#{$i} {
             font-size: #{$i}pt !important;
@@ -110,15 +96,13 @@
 }
 
 @mixin placeholder($color) {
-    ::placeholder {
+     ::placeholder {
         color: $color !important;
     }
-
-    :-ms-input-placeholder {
+     :-ms-input-placeholder {
         color: $color !important;
     }
-
-    ::-ms-input-placeholder {
+     ::-ms-input-placeholder {
         color: $color !important;
     }
 }
@@ -128,4 +112,8 @@
     line-height: $line-height;
     font-weight: $font-weight;
     letter-spacing: $spacing;
+}
+
+@function toRGB ($color) {
+    @return "rgb("+red($color)+", "+green($color)+", "+blue($color)+")";
 }

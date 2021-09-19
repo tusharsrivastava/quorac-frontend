@@ -27,7 +27,7 @@ const _LeftSidebar = (props) => {
   const toggleFollow = useCallback((e, cat) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(toggleFollowCategory(cat.key));
+    dispatch(toggleFollowCategory(cat.id));
     return false;
   }, [dispatch]);
 
